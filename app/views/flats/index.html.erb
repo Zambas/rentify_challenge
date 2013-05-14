@@ -1,0 +1,100 @@
+
+<h1>Search for flats</h1>
+
+Search by:<br>
+
+<form id="search_radio">
+	<input type="radio" id="radio1" name="search" value="1" checked="checked">Area and rooms<br>
+	<input type="radio" id="radio2" name="search" value="2">House name
+</form>
+<%= form_tag flats_path, :id => "search1", :method => :get do %>
+  <p>
+  	address:
+    <%= text_field_tag :search, params[:search] %>
+    number of rooms:
+    <select id="rooms_select">
+    	<option value=""></option>
+    	<option value="1">1</option>
+    	<option value="2">2</option>
+    	<option value="3">3</option>
+    	<option value="4">4</option>
+    	<option value="5">5</option>
+    </select>
+    <%= hidden_field_tag :rooms, params[:rooms] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
+<%= form_tag flats_path, :id => "search2", :method => :get do %>
+	house name:
+    <%= text_field_tag :name, params[:name] %>
+    <%= submit_tag "Search", :name => nil %>
+<% end %>
+
+
+<%if @notice.present? %>
+
+	<h2><%=@notice%></h2>
+<% else %>
+	<h1>Listing flats</h1>
+<% end %>
+
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Bedroom count</th>
+    <th>Address</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @flats.each do |flat| %>
+  <tr>
+    <td><%= flat.name %></td>
+    <td><%= flat.bedroom_count %></td>
+    <td><%= flat.address %></td>
+    <td><%= flat.latitude %></td>
+    <td><%= flat.longitude %></td>
+    <td><%= link_to 'Show', flat %></td>
+    <td><%= link_to 'Edit', edit_flat_path(flat) %></td>
+    <td><%= link_to 'Destroy', flat, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Flat', new_flat_path %>
+
+<script>
+  $(function(){
+  
+  	  if ($("#radio1").prop('checked')){
+		  	  $("#search2").hide();
+		  	  $("#search1").show();
+	  } else {
+		  	  $("#search1").hide();
+		  	  $("#search2").show();
+	  };
+  
+  	  $("#search_radio").change(function() {
+	  	  if ($("#radio1").prop('checked')){
+		  	  $("#search2").hide();
+		  	  $("#search1").show();
+	  	  } else {
+		  	  $("#search1").hide();
+		  	  $("#search2").show();
+	  	  };
+	  });
+  
+  	  $("#rooms_select").val(<%=params[:rooms]%>);
+      $("#rooms").val($("#rooms_select").val());
+      $("#rooms_select").change(function() {
+           $("#rooms").val($("#rooms_select").val());      
+      });
+  });
+</script>

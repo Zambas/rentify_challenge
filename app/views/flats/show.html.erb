@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @flat.name %>
+</p>
+
+<p>
+  <b>Bedroom count:</b>
+  <%= @flat.bedroom_count %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @flat.address %>
+</p>
+
+<p>
+  <b>Latitude:</b>
+  <%= @flat.latitude %>
+</p>
+
+<p>
+  <b>Longitude:</b>
+  <%= @flat.longitude %>
+</p>
+
+
+<h1>Near this flat (with the same or more rooms)</h1>
+
+<ul>
+<% for flat in @flat.nearbys(12) %>
+  <% @distance_km = flat.distance.round(2)*1.6 %>
+  <% if flat.bedroom_count >= @flat.bedroom_count %>
+  	<li><%= link_to flat.address, flat %> (<%= number_with_precision @distance_km, :precision => 2 %> Kilometers +-). This property has <%= flat.bedroom_count%> rooms.</li>
+  <% end %>
+<% end %>
+</ul>
+
+
+<%= link_to 'Edit', edit_flat_path(@flat) %> |
+<%= link_to 'Back', flats_path %>
